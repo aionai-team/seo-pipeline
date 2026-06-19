@@ -38,6 +38,7 @@ from urllib.parse import urlparse
 import requests
 
 from lib import url_utils
+from lib.supabase_client import get_supabase
 
 
 USER_AGENT = (
@@ -401,6 +402,7 @@ def main():
     parser.add_argument("--no-filter", action="store_true",
                         help="Skip blocklist/classification filter (process all URLs)")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--run-id", default=None, help="Pipeline run ID for Supabase insertion")
     args = parser.parse_args()
 
     # Read input — flexible format
@@ -552,6 +554,39 @@ def main():
         "failed": failed,
         "results": scraped,
     }
+
+    # ─── Supabase insertion ────────────────────────────────────────
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            rows = []
+            for r in scraped:
+                if r.get("status") != "success":
+                    continue
+                rows.append({
+                    "run_id": args.run_id,
+                    "url": r.get("url", ""),
+                    "domain": r.get("domain", ""),
+                    "keyword": r.get("keyword", ""),
+                    "meta_title": r.get("meta_title", ""),
+                    "word_count": r.get("word_count", 0),
+                    "h1_count": r.get("h1_count", 0),
+                    "h2_count": r.get("h2_count", 0),
+                    "h3_count": r.get("h3_count", 0),
+                    "faqs": r.get("faqs", []),
+                    "schema_count": r.get("schema_count", 0),
+                    "has_faq_schema": r.get("has_faq_schema", False),
+                    "has_org_schema": r.get("has_organization_schema", False),
+                    "geo_score": r.get("geo_score", 0),
+                    "geo_signals": r.get("geo_signals", {}),
+                })
+            if rows:
+                supabase.table("competitors").insert(rows).execute()
+                if args.verbose:
+                    print(f"[verbose] Inserted {len(rows)} rows into 'competitors' table",
+                          file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Supabase insert failed: {e}", file=sys.stderr)
 
     json.dump(output, sys.stdout, ensure_ascii=False, indent=2)
 

@@ -39,6 +39,7 @@ from pathlib import Path
 from typing import Optional
 
 from lib import url_utils
+from lib.supabase_client import get_supabase
 from playwright.async_api import async_playwright
 
 
@@ -510,6 +511,12 @@ def main():
                         help="Only process keywords with these intents: comma-separated "
                              "(e.g. COMMERCIAL,TRANSACTIONAL). INFO keywords are skipped.")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument(
+        "--run-id",
+        type=str,
+        default=None,
+        help="Supabase pipeline run ID for writing serp_results",
+    )
     args = parser.parse_args()
 
     # Read input
@@ -562,6 +569,23 @@ def main():
     json.dump(data, sys.stdout, ensure_ascii=False, indent=2)
     if args.output:
         Path(args.output).write_text(json.dumps(data, ensure_ascii=False, indent=2), "utf-8")
+
+    # ─── Supabase write ────────────────────────────────────────────────
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            for r in results:
+                supabase.table("serp_results").insert({
+                    "run_id": args.run_id,
+                    "keyword": r.get("keyword", ""),
+                    "trend_score": r.get("trend_score", 0),
+                    "organic_urls": json.dumps(r.get("organic_urls", []), ensure_ascii=False),
+                    "blocked": r.get("status") == "blocked",
+                }).execute()
+            if args.verbose:
+                print(f"[verbose] Written {len(results)} SERP results to Supabase (run_id={args.run_id})", file=sys.stderr)
+        except Exception as e:
+            print(f"[warn] Supabase write failed: {e}", file=sys.stderr)
 
     if args.verbose:
         print(f"\n[verbose] Done: {data['successful']} ok, {data['blocked']} blocked", file=sys.stderr)

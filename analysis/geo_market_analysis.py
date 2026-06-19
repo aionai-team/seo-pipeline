@@ -39,6 +39,7 @@ import requests
 
 from lib import geo_scorer
 from lib import url_utils
+from lib.supabase_client import get_supabase
 
 
 USER_AGENT = (
@@ -218,6 +219,8 @@ def main():
                         help=f"Delay between requests (default: {REQUEST_DELAY}s)")
     parser.add_argument("--max", type=int, default=20,
                         help="Max competitors to analyze (default: 20)")
+    parser.add_argument("--run-id", type=str, default=None,
+                        help="Pipeline run ID for Supabase tracking")
     parser.add_argument("--verbose", action="store_true",
                         help="Verbose output")
     args = parser.parse_args()
@@ -298,7 +301,26 @@ def main():
         Path(args.output).write_text(json_str, "utf-8")
         if args.verbose:
             print(f"\n[verbose] Saved to {args.output}", file=sys.stderr)
-    
+
+    # Write to Supabase if run_id provided
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            supabase.table("geo_market").insert({
+                "run_id": args.run_id,
+                "competitors_analyzed": market_stats["competitors_analyzed"],
+                "avg_score": market_stats["avg_score"],
+                "median_score": market_stats["median_score"],
+                "max_score": market_stats["max_score"],
+                "min_score": market_stats["min_score"],
+                "score_distribution": market_stats.get("scores_distribution", {}),
+                "signal_analysis": market_stats.get("signal_market_analysis", {}),
+            }).execute()
+            if args.verbose:
+                print(f"[verbose] Written to Supabase geo_market table", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write to Supabase: {e}", file=sys.stderr)
+
     return 0
 
 

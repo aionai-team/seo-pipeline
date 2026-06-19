@@ -50,6 +50,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+from lib.supabase_client import get_supabase
+
 
 def load_json_or_exit(path: str, label: str = "") -> dict:
     """Load JSON file or print error and exit."""
@@ -531,6 +533,8 @@ def main() -> None:
     parser.add_argument("--competitors", default=None,
                         help="Directory of competitor _googlebot.json files (optional)")
     parser.add_argument("--output", default=None, help="Output JSON file")
+    parser.add_argument("--run-id", type=str, default=None,
+                        help="Pipeline run ID for Supabase tracking")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -545,6 +549,25 @@ def main() -> None:
     print(output)
     if args.output:
         Path(args.output).write_text(output, encoding="utf-8")
+
+    # Write to Supabase if run_id provided
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            overall = report.get("overall", {})
+            raw = report.get("googlebot_raw", {})
+            supabase.table("site_assessments").insert({
+                "run_id": args.run_id,
+                "assessment_type": "comparison",
+                "score": overall.get("score", 0),
+                "verdict": overall.get("verdict", ""),
+                "word_count": raw.get("raw_word_count", 0),
+                "data": report,
+            }).execute()
+            if args.verbose:
+                print(f"[verbose] Written to Supabase site_assessments table", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write to Supabase: {e}", file=sys.stderr)
 
     return 0
 

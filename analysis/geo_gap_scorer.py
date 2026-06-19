@@ -36,6 +36,7 @@ from datetime import datetime
 from pathlib import Path
 
 from lib import geo_scorer
+from lib.supabase_client import get_supabase
 
 
 # ─── Gap priority based on weight + market advantage ─────────────────────
@@ -271,6 +272,8 @@ def main():
                         help="geo_market_analysis.py output JSON")
     parser.add_argument("--output", type=str, default=None,
                         help="Output JSON path")
+    parser.add_argument("--run-id", type=str, default=None,
+                        help="Pipeline run ID for Supabase tracking")
     parser.add_argument("--verbose", action="store_true",
                         help="Verbose output")
     args = parser.parse_args()
@@ -371,7 +374,26 @@ def main():
         Path(args.output).write_text(json_str, "utf-8")
         if args.verbose:
             print(f"\n[verbose] Saved to {args.output}", file=sys.stderr)
-    
+
+    # Write to Supabase if run_id provided
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            for gap in gap_report.get("gaps", []):
+                supabase.table("geo_gaps").insert({
+                    "run_id": args.run_id,
+                    "signal": gap["signal"],
+                    "weight": gap["weight"],
+                    "we_have_it": gap["we_have_it"],
+                    "market_presence_pct": gap["market_presence_pct"],
+                    "priority": gap["priority"],
+                    "score": gap["score"],
+                }).execute()
+            if args.verbose:
+                print(f"[verbose] Written {len(gap_report.get('gaps', []))} gaps to Supabase geo_gaps table", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write to Supabase: {e}", file=sys.stderr)
+
     return 0
 
 

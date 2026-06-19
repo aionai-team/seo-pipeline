@@ -38,6 +38,7 @@ import pandas as pd
 from pytrends.request import TrendReq
 
 from lib import url_utils
+from lib.supabase_client import get_supabase
 
 
 # ─── Rate limiting ────────────────────────────────────────────────────────
@@ -319,6 +320,12 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         default=False,
         help="Print progress to stderr",
     )
+    parser.add_argument(
+        "--run-id",
+        type=str,
+        default=None,
+        help="Supabase pipeline run ID for updating keyword trends",
+    )
     return parser.parse_args(argv)
 
 
@@ -387,6 +394,24 @@ def main(argv: Optional[list[str]] = None) -> int:
         Path(args.output).write_text(output, encoding="utf-8")
         if args.verbose:
             print(f"\n[verbose] Saved to {args.output}", file=sys.stderr)
+
+    # ─── Supabase write ────────────────────────────────────────────────
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            for r in results:
+                supabase.table("keywords").update({
+                    "trend_score": r.get("trend_score"),
+                    "trend_direction": r.get("trend_direction"),
+                    "rank": r.get("rank"),
+                    "percent_change": r.get("percent_change"),
+                    "peak_month": r.get("peak_month"),
+                    "data_points": r.get("data_points"),
+                }).eq("run_id", args.run_id).eq("query", r.get("keyword", "")).execute()
+            if args.verbose:
+                print(f"[verbose] Updated {len(results)} keywords in Supabase (run_id={args.run_id})", file=sys.stderr)
+        except Exception as e:
+            print(f"[warn] Supabase write failed: {e}", file=sys.stderr)
 
     return 0
 

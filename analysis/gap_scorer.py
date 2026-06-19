@@ -40,6 +40,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+from lib.supabase_client import get_supabase
+
 
 # ─── Intent Mismatch Detection ─────────────────────────────────
 
@@ -314,6 +316,7 @@ def main():
     parser.add_argument("--min-trend", type=float, default=0,
                         help="Minimum trend_score to include (def: 0 = all)")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--run-id", default=None, help="Pipeline run ID for Supabase insertion")
     args = parser.parse_args()
 
     # Read trend data
@@ -435,6 +438,32 @@ def main():
             for s in scored[:5]
         ],
     }
+
+    # ─── Supabase insertion ────────────────────────────────────────
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            rows = []
+            for s in scored:
+                rows.append({
+                    "run_id": args.run_id,
+                    "keyword": s.get("keyword", ""),
+                    "gap_score": s.get("gap_score", 0),
+                    "priority": s.get("priority", ""),
+                    "intent": s.get("intent", ""),
+                    "trend_score": s.get("trend_score", 0),
+                    "agency_in_top_10": s.get("agency_in_top_10", 0),
+                    "mismatch_type": s.get("mismatch_type", ""),
+                    "recommendation": s.get("recommendation", ""),
+                    "classification": s.get("classification", {}),
+                })
+            if rows:
+                supabase.table("gap_analysis").insert(rows).execute()
+                if args.verbose:
+                    print(f"[verbose] Inserted {len(rows)} rows into 'gap_analysis' table",
+                          file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Supabase insert failed: {e}", file=sys.stderr)
 
     json.dump(output, sys.stdout, ensure_ascii=False, indent=2)
     if args.output:

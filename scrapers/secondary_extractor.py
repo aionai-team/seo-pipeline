@@ -38,6 +38,7 @@ from urllib.parse import urlparse
 import requests
 
 from lib import url_utils
+from lib.supabase_client import get_supabase
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -327,6 +328,7 @@ def main():
     parser.add_argument("--questions-only", action="store_true",
                         help="Only extract Reddit/Quora questions (skip directories, news)")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--run-id", default=None, help="Pipeline run ID for Supabase insertion")
     args = parser.parse_args()
 
     # Read input
@@ -375,6 +377,30 @@ def main():
             ),
         },
     }
+
+    # ─── Supabase insertion ────────────────────────────────────────
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            rows = []
+            for r in intelligence:
+                summary = r.get("secondary_summary", {})
+                rows.append({
+                    "run_id": args.run_id,
+                    "keyword": r.get("keyword", ""),
+                    "trend_score": r.get("trend_score", 0),
+                    "total_secondary_urls": summary.get("total_secondary_urls", 0),
+                    "questions_found": summary.get("questions_found", 0),
+                    "agencies_discovered": summary.get("agencies_discovered", 0),
+                    "secondary_data": r.get("secondary", {}),
+                })
+            if rows:
+                supabase.table("secondary_intel").insert(rows).execute()
+                if args.verbose:
+                    print(f"[verbose] Inserted {len(rows)} rows into 'secondary_intel' table",
+                          file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Supabase insert failed: {e}", file=sys.stderr)
 
     json.dump(output, sys.stdout, ensure_ascii=False, indent=2)
     if args.output:

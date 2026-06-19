@@ -4,10 +4,7 @@ __pycache__/
 .serp_session/
 .env
 *.log
-data/runs/
+data/
 archive/
 .DS_Store
-*.pdf
-data/runs/
-archive/
 *.pdf

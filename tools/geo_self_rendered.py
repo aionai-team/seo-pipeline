@@ -37,6 +37,7 @@ from typing import Optional
 import requests
 
 from lib import geo_scorer
+from lib.supabase_client import get_supabase
 
 # ─── Constants ────────────────────────────────────────────────────────────
 
@@ -94,6 +95,8 @@ def main():
                         help=f"URL to analyze (default: {TARGET_URL})")
     parser.add_argument("--output", type=str, default=None,
                         help="Output JSON path")
+    parser.add_argument("--run-id", type=str, default=None,
+                        help="Pipeline run ID for Supabase tracking")
     parser.add_argument("--verbose", action="store_true",
                         help="Verbose output")
     args = parser.parse_args()
@@ -174,6 +177,23 @@ def main():
         Path(args.output).write_text(json_str, "utf-8")
         if args.verbose:
             print(f"[verbose] Saved to {args.output}", file=sys.stderr)
+
+    # Write to Supabase if run_id provided
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            supabase.table("geo_self").insert({
+                "run_id": args.run_id,
+                "geo_score": scored["score"],
+                "geo_level": scored["level"],
+                "word_count": word_count,
+                "signals": output_signals,
+                "basic_stats": report["basic_stats"],
+            }).execute()
+            if args.verbose:
+                print(f"[verbose] Written to Supabase geo_self table", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write to Supabase: {e}", file=sys.stderr)
 
     return 0
 

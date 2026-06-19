@@ -44,6 +44,8 @@ from typing import Optional
 from urllib.request import Request, urlopen
 from urllib.error import URLError
 
+from lib.supabase_client import get_supabase
+
 # ─── Project paths ────────────────────────────────────────────────────────
 AI_SITE_ROOT = Path("/home/bog/main_folder/projects/ai_site")
 INDEX_HTML = AI_SITE_ROOT / "src/index.html"
@@ -687,7 +689,8 @@ def run_extract(output_path: str = "", verbose: bool = False) -> dict:
     return data
 
 
-def run_googlebot_check(url: str, verbose: bool = False, output_path: str = "") -> dict:
+def run_googlebot_check(url: str, verbose: bool = False, output_path: str = "",
+                         run_id: str = "") -> dict:
     """Fetch as Googlebot, extract content, compare with source, report gaps."""
     if verbose:
         print(f"[verbose] Fetching as Googlebot: {url}", file=sys.stderr)
@@ -738,6 +741,24 @@ def run_googlebot_check(url: str, verbose: bool = False, output_path: str = "") 
         Path(output_path).write_text(output, encoding="utf-8")
         if verbose:
             print(f"[verbose] Saved to {output_path}", file=sys.stderr)
+
+    # Write to Supabase if run_id provided
+    if run_id:
+        try:
+            supabase = get_supabase()
+            gv = report.get("googlebot_view", {})
+            supabase.table("site_assessments").insert({
+                "run_id": run_id,
+                "assessment_type": "googlebot_raw",
+                "score": report.get("score", 0),
+                "word_count": gv.get("body", {}).get("word_count", 0),
+                "data": report,
+            }).execute()
+            if verbose:
+                print(f"[verbose] Written to Supabase site_assessments table (googlebot_raw)", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write googlebot_raw to Supabase: {e}", file=sys.stderr)
+
     return report
 
 
@@ -816,7 +837,8 @@ def validate_jsonld(json_ld: dict) -> list[dict]:
     return issues
 
 
-def run_jsonld_validation(url: str, verbose: bool = False, output_path: str = "") -> dict:
+def run_jsonld_validation(url: str, verbose: bool = False, output_path: str = "",
+                           run_id: str = "") -> dict:
     """Fetch URL and validate JSON-LD."""
     if verbose:
         print(f"[verbose] Validating JSON-LD at: {url}", file=sys.stderr)
@@ -844,6 +866,23 @@ def run_jsonld_validation(url: str, verbose: bool = False, output_path: str = ""
         Path(output_path).write_text(output, encoding="utf-8")
         if verbose:
             print(f"[verbose] Saved to {output_path}", file=sys.stderr)
+
+    # Write to Supabase if run_id provided
+    if run_id:
+        try:
+            supabase = get_supabase()
+            supabase.table("site_assessments").insert({
+                "run_id": run_id,
+                "assessment_type": "jsonld",
+                "score": None,
+                "verdict": str(report.get("total_issues", 0)),
+                "data": report,
+            }).execute()
+            if verbose:
+                print(f"[verbose] Written to Supabase site_assessments table (jsonld)", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write jsonld to Supabase: {e}", file=sys.stderr)
+
     return report
 
 
@@ -1159,6 +1198,7 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
     parser.add_argument("--geo-check", action="store_true", default=False,
                         help="Analyze our own source code for GEO signals (no URL needed)")
     parser.add_argument("--output", type=str, default=None, help="Output JSON file")
+    parser.add_argument("--run-id", type=str, default=None, help="Pipeline run ID for Supabase insertion")
     parser.add_argument("--verbose", action="store_true", default=False, help="Print progress to stderr")
     return parser.parse_args(argv)
 
@@ -1249,11 +1289,11 @@ def main(argv: Optional[list[str]] = None) -> int:
         # Requires Playwright
         run_health_check(args.health_check, args.output or "", args.verbose)
     elif args.googlebot:
-        run_googlebot_check(args.googlebot, args.verbose, args.output or "")
+        run_googlebot_check(args.googlebot, args.verbose, args.output or "", run_id=args.run_id or "")
     elif args.googlebot_rendered:
-        run_googlebot_rendered(args.googlebot_rendered, args.verbose, args.output or "")
+        run_googlebot_rendered(args.googlebot_rendered, args.verbose, args.output or "", run_id=args.run_id or "")
     elif args.validate_jsonld:
-        run_jsonld_validation(args.validate_jsonld, args.verbose, args.output or "")
+        run_jsonld_validation(args.validate_jsonld, args.verbose, args.output or "", run_id=args.run_id or "")
     elif args.batch_competitors:
         run_batch_competitors(args.batch_competitors, args.verbose)
     elif args.geo_check:
@@ -1351,7 +1391,8 @@ def run_health_check(url: str, output_path: str = "", verbose: bool = False) -> 
     return report
 
 
-def run_googlebot_rendered(url: str, verbose: bool = False, output_path: str = "") -> dict:
+def run_googlebot_rendered(url: str, verbose: bool = False, output_path: str = "",
+                            run_id: str = "") -> dict:
     """Full Chromium render with Googlebot-like constraints (5s timeout)."""
     from playwright.async_api import async_playwright
 
@@ -1429,6 +1470,25 @@ def run_googlebot_rendered(url: str, verbose: bool = False, output_path: str = "
         Path(output_path).write_text(output, encoding="utf-8")
         if verbose:
             print(f"[verbose] Saved to {output_path}", file=sys.stderr)
+
+    # Write to Supabase if run_id provided
+    if run_id:
+        try:
+            supabase = get_supabase()
+            rendered_info = report.get("rendered", {})
+            supabase.table("site_assessments").insert({
+                "run_id": run_id,
+                "assessment_type": "rendered",
+                "score": rendered_info.get("word_count", 0),
+                "verdict": report.get("js_gap", {}).get("status", ""),
+                "word_count": rendered_info.get("word_count", 0),
+                "data": report,
+            }).execute()
+            if verbose:
+                print(f"[verbose] Written to Supabase site_assessments table (rendered)", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Failed to write rendered to Supabase: {e}", file=sys.stderr)
+
     return report
 
 

@@ -12,13 +12,19 @@ Usage:
 Output: data/latest/status.json
 """
 
+import argparse
 import json
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
 
+# Add project root to path for lib imports
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from lib.supabase_client import get_supabase, upsert_status
 DATA_DIR = ROOT / "data"
 LATEST_DIR = DATA_DIR / "latest"
 RUNS_DIR = DATA_DIR / "runs"
@@ -93,7 +99,12 @@ def parse_runs() -> list[str]:
 
 
 def main():
-    verbose = "--verbose" in sys.argv
+    parser = argparse.ArgumentParser(description="Generate status.json and optionally save to status_snapshots")
+    parser.add_argument("--verbose", action="store_true", help="Print verbose debug output")
+    parser.add_argument("--run-id", type=str, default=None,
+                        help="UUID of a pipeline_run to associate this snapshot with")
+    args = parser.parse_args()
+    verbose = args.verbose
 
     status = {
         "generated": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
@@ -348,6 +359,16 @@ def main():
     if verbose:
         print(f"\n[verbose] Status written to {dest}", file=sys.stderr)
         print(f"[verbose] Summary: {status['summary']}", file=sys.stderr)
+
+    # ─── Supabase snapshot (optional, requires --run-id) ───
+    if args.run_id:
+        try:
+            supabase = get_supabase()
+            upsert_status(supabase, args.run_id, status["summary"], status)
+            if verbose:
+                print(f"[verbose] Snapshot saved to status_snapshots (run_id={args.run_id})", file=sys.stderr)
+        except Exception as e:
+            print(f"[warning] Failed to save to status_snapshots: {e}", file=sys.stderr)
 
     return 0
 

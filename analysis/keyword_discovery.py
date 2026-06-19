@@ -47,6 +47,7 @@ from xml.etree import ElementTree
 
 import requests
 
+from lib.supabase_client import get_supabase, create_pipeline_run
 
 # ─── Built-in seeds ───────────────────────────────────────────────────────
 # Derived from aionAI's services, FAQ, meta, and use cases.
@@ -427,6 +428,12 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         default=False,
         help="Print progress to stderr",
     )
+    parser.add_argument(
+        "--run-id",
+        type=str,
+        default=None,
+        help="Supabase pipeline run ID (creates one if not provided)",
+    )
     return parser.parse_args(argv)
 
 
@@ -514,6 +521,31 @@ def main(argv: Optional[list[str]] = None) -> int:
         Path(args.output).write_text(output, encoding="utf-8")
         if args.verbose:
             print(f"\n[verbose] Saved to {args.output}", file=sys.stderr)
+
+    # ─── Supabase write ────────────────────────────────────────────────
+    try:
+        supabase = get_supabase()
+        run_id = args.run_id
+        if run_id is None:
+            run_id = create_pipeline_run(
+                supabase,
+                run_date=time.strftime("%Y-%m-%d"),
+                seeds_used=seeds_done,
+            )
+        # Insert each keyword into 'keywords' table
+        for kw in all_keywords:
+            supabase.table("keywords").insert({
+                "run_id": run_id,
+                "query": kw["query"],
+                "intent": kw["intent"],
+                "is_question": kw["question"],
+            }).execute()
+        # Update seeds_used in pipeline_runs
+        supabase.table("pipeline_runs").update({"seeds_used": seeds_done}).eq("id", run_id).execute()
+        if args.verbose:
+            print(f"[verbose] Written {len(all_keywords)} keywords to Supabase (run_id={run_id})", file=sys.stderr)
+    except Exception as e:
+        print(f"[warn] Supabase write failed: {e}", file=sys.stderr)
 
     return 0
 
