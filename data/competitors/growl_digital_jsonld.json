@@ -1,0 +1,180 @@
+{
+  "timestamp": "2026-06-14T15:12:46",
+  "source": "competitor_jsonld_validation",
+  "url": "https://growl.digital",
+  "domain": "growl.digital",
+  "has_json_ld": true,
+  "json_ld": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.growl.digital/",
+        "url": "https://www.growl.digital/",
+        "name": "Digital Marketing Agency | Θεσσαλονίκη | GRØWL Digital®",
+        "isPartOf": {
+          "@id": "https://www.growl.digital/#website"
+        },
+        "about": {
+          "@id": "https://www.growl.digital/#organization"
+        },
+        "primaryImageOfPage": {
+          "@id": "https://www.growl.digital/#primaryimage"
+        },
+        "image": {
+          "@id": "https://www.growl.digital/#primaryimage"
+        },
+        "thumbnailUrl": "https://www.growl.digital/wp-content/uploads/2025/07/banner-yuga.png",
+        "datePublished": "2025-07-04T20:49:57+00:00",
+        "dateModified": "2026-05-29T11:13:15+00:00",
+        "description": "Δεν είμαστε ένα ακόμα Digital Marketing Agency, είμαστε ο Growth Partner που βλέπει τι δουλεύει και το μετατρέπει σε πωλήσεις. Mαζί, βήμα-βήμα.",
+        "breadcrumb": {
+          "@id": "https://www.growl.digital/#breadcrumb"
+        },
+        "inLanguage": "el",
+        "potentialAction": [
+          {
+            "@type": "ReadAction",
+            "target": [
+              "https://www.growl.digital/"
+            ]
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "inLanguage": "el",
+        "@id": "https://www.growl.digital/#primaryimage",
+        "url": "https://www.growl.digital/wp-content/uploads/2025/07/banner-yuga.png",
+        "contentUrl": "https://www.growl.digital/wp-content/uploads/2025/07/banner-yuga.png",
+        "width": 1920,
+        "height": 1080,
+        "caption": "growl digital marketing agency thessaloniki"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.growl.digital/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home"
+          }
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.growl.digital/#website",
+        "url": "https://www.growl.digital/",
+        "name": "GRØWL Digital",
+        "description": "Digital Marketing Agency Thessaloniki",
+        "publisher": {
+          "@id": "https://www.growl.digital/#organization"
+        },
+        "alternateName": "GRØWL",
+        "potentialAction": [
+          {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.growl.digital/?s={search_term_string}"
+            },
+            "query-input": {
+              "@type": "PropertyValueSpecification",
+              "valueRequired": true,
+              "valueName": "search_term_string"
+            }
+          }
+        ],
+        "inLanguage": "el"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.growl.digital/#organization",
+        "name": "GRØWL Digital",
+        "alternateName": "GRØWL",
+        "url": "https://www.growl.digital/",
+        "logo": {
+          "@type": "ImageObject",
+          "inLanguage": "el",
+          "@id": "https://www.growl.digital/#/schema/logo/image/",
+          "url": "https://www.growl.digital/wp-content/uploads/2025/07/growl-digital-marketing-agency-thessaloniki.jpg",
+          "contentUrl": "https://www.growl.digital/wp-content/uploads/2025/07/growl-digital-marketing-agency-thessaloniki.jpg",
+          "width": 1200,
+          "height": 675,
+          "caption": "GRØWL Digital"
+        },
+        "image": {
+          "@id": "https://www.growl.digital/#/schema/logo/image/"
+        },
+        "sameAs": [
+          "https://www.facebook.com/growldigital",
+          "https://x.com/growldigital",
+          "https://www.instagram.com/growl.digital/",
+          "https://www.tiktok.com/@growldigital",
+          "https://www.linkedin.com/company/growldigital/",
+          "https://www.youtube.com/@growldigital",
+          "https://gr.pinterest.com/growldigital/"
+        ]
+      }
+    ]
+  },
+  "issues": [
+    {
+      "type": "missing_telephone",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: telephone"
+    },
+    {
+      "type": "missing_email",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: email"
+    },
+    {
+      "type": "missing_description",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: description"
+    },
+    {
+      "type": "missing_foundingDate",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: foundingDate"
+    },
+    {
+      "type": "missing_areaServed",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: areaServed"
+    },
+    {
+      "type": "missing_serviceType",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: serviceType"
+    },
+    {
+      "type": "missing_address",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: address"
+    },
+    {
+      "type": "missing_areas",
+      "severity": "MEDIUM",
+      "message": "No areaServed entries for local SEO"
+    },
+    {
+      "type": "missing_services",
+      "severity": "MEDIUM",
+      "message": "No serviceType entries"
+    },
+    {
+      "type": "short_description",
+      "severity": "LOW",
+      "message": "Description is only 0 chars (min 50)"
+    },
+    {
+      "type": "description_not_greek",
+      "severity": "MEDIUM",
+      "message": "Description does not contain Greek characters"
+    }
+  ],
+  "issue_count": 11
+}

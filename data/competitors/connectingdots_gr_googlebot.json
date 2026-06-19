@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-06-14T15:12:50",
+  "source": "competitor_googlebot",
+  "url": "https://connectingdots.gr",
+  "domain": "connectingdots.gr",
+  "googlebot_view": {
+    "meta": {
+      "title": "Digital Marketing Agency Θεσσαλονίκη | Connecting Dots",
+      "viewport": "width=device-width, initial-scale=1.0",
+      "keywords": "digital agency, marketing agency, digital agencies, marketing agencies, digital agencies thessaloniki, marketing agencies thessaloniki",
+      "description": "Ως full stack digital marketing agency, σας βοηθάμε να εκφράσετε την ταυτότητά σας online με αυθεντικότητα, στρατηγική και ουσιαστικά αποτελέσματα.",
+      "generator": "Connecting Dots, connectingdots.gr",
+      "theme-color": "#ea4335",
+      "og:title": "Digital Marketing Agency Θεσσαλονίκη | Connecting Dots",
+      "og:description": "Ως full stack digital marketing agency, σας βοηθάμε να εκφράσετε την ταυτότητά σας online με αυθεντικότητα, στρατηγική και ουσιαστικά αποτελέσματα.",
+      "og:url": "https://connectingdots.gr",
+      "og:type": "website",
+      "robots": "index, follow",
+      "referrer": "origin"
+    },
+    "json_ld": {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": "Connecting Dots Agency",
+      "url": "/",
+      "logo": "//capp.nicepage.com/images/default-logo.png",
+      "sameAs": [
+        "https://www.facebook.com/connectingdots.gr",
+        "https://www.linkedin.com/company/connectingdotsgr",
+        "https://www.instagram.com/connectingdotsgr/"
+      ]
+    },
+    "body": {
+      "raw_text_snippet": "Homepage About us Brand Story Our Team Agile Manifesto Πιστοποιήσεις Google Partner Google Cloud Partner Hubspot Partner Συνεργασίες Κώδικας Δεοντολογίας Συμμόρφωση GDPR Work With Us B2B Affiliate Partnership White Label Contact Us Target Markets E-commerce Retail Local Hospitality Health B2B Partnerships Startup Application Development Business Publishers Επαγγελματίες Υπηρεσιών B2C Services Marketing Digital Advertising Website Services Creative Content Conversion Optimization Cloud Services C",
+      "word_count": 1030,
+      "has_app_root": false,
+      "has_rendered_content": true,
+      "custom_elements_found": [],
+      "links_found": 193,
+      "links": [
+        "#",
+        "#",
+        "/",
+        "/error-404.html",
+        "/About-us/brand-story",
+        "/About-us/our-team",
+        "/About-us/agile-manifesto",
+        "/About-us/pistopoiiseis",
+        "/About-us/google-partner",
+        "/About-us/google-cloud-partner",
+        "/About-us/hubspot-partner",
+        "/About-us/sinergasies",
+        "/About-us/kodikas-deontologias",
+        "/About-us/gdpr-compliance",
+        "/About-us/work-with-us",
+        "/About-us/b2b--sinergasies",
+        "/About-us/affiliate",
+        "/About-us/white-label",
+        "/About-us/epikoinonia",
+        "/error-404.html"
+      ]
+    },
+    "assessment": {
+      "needs_javascript": false,
+      "json_ld_available": true,
+      "meta_available": true
+    }
+  }
+}

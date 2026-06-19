@@ -1,0 +1,143 @@
+# ─── Domain Blocklist ──────────────────────────────────────────
+# URLs from these domains are NOT competitors (or content platforms).
+# Full domain match (subdomains are checked too).
+# Categories: TLDs, Greek institutional, Greek news, global SaaS,
+#             job boards, review sites, definition sites, platforms.
+#
+
+# --- Greek TLD / institutional ---
+edu.gr                              # Greek educational institutions
+gov.gr                              # Greek government sites
+parliament.gr                       # Greek parliament
+ecdcd.gov.gr                        # Gov agency
+nationalcoalition.gov.gr            # Gov coalition site
+foresight.gov.gr                     # Gov foresight agency
+
+# --- Greek educational / research ---
+eetn.gr                              # Hellenic AI Society (non-commercial)
+ekke.gr                              # National Centre for Social Research
+scify.org                            # SciFY non-profit org
+elementsofai.gr                      # Elements of AI educational
+cears.edu.gr                         # Logistics education (not AI agency)
+academias.com                        # Greek educational directory
+
+# --- Greek news & media ---
+ot.gr                                # News
+news247.gr                           # News
+in.gr                                # News
+tovima.gr                            # News
+kathimerini.gr                       # News
+protothema.gr                        # News
+ethnos.gr                            # News
+efsyn.gr                             # News
+capital.gr                           # Financial news
+naftemporiki.gr                      # Financial news
+euro2day.gr                          # Financial news
+businessdaily.gr                     # Business news
+newsbeast.gr                         # News
+newsit.gr                            # News
+iefimerida.gr                        # News
+skai.gr                              # TV/News
+cnn.gr                               # News
+ert.gr                               # Public broadcaster
+
+# --- Global SaaS / tech giants (not AI agencies) ---
+salesforce.com                       # CRM SaaS
+hubspot.com                          # CRM SaaS
+zendesk.com                          # Customer service SaaS
+intercom.com                         # Customer messaging
+freshworks.com                       # SaaS
+sap.com                              # ERP
+oracle.com                           # Enterprise software
+microsoft.com                        # Tech giant
+ibm.com                              # Tech giant
+google.com                           # Tech giant (excluding Google Business)
+aws.amazon.com                       # Cloud
+zapier.com                           # Automation platform
+make.com                             # Automation platform (formerly Integromat)
+n8n.io                               # Automation platform
+
+# --- Job boards / recruitment ---
+indeed.com                           # Job board
+glassdoor.com                        # Jobs + reviews
+kariera.gr                           # Greek job board
+skywalker.gr                         # Greek job board
+ergasia.gr                           # Greek job board
+xrisresoules.gr                      # Greek classifieds
+
+# --- Review / comparison / definition sites ---
+clutch.co                            # Agency directory / reviews
+g2.com                               # Software reviews
+capterra.com                         # Software reviews
+goodfirms.co                         # Agency reviews
+trustpilot.com                       # Reviews
+sitejabber.com                       # Reviews
+sortlist.com                         # Agency directory
+designrush.com                       # Agency directory
+topseos.com                          # Agency directory
+investopedia.com                     # Financial definitions
+
+# --- Social media ---
+facebook.com
+twitter.com
+x.com
+instagram.com
+tiktok.com
+pinterest.com
+linkedin.com
+
+# --- Platforms / code hosts ---
+github.com
+stackoverflow.com
+gitbook.com
+notion.so
+npmjs.com
+pypi.org
+docker.com
+reddit.com
+quora.com
+wikipedia.org
+medium.com
+techcrunch.com
+
+# --- News / media ---
+forbes.com
+wired.com
+venturebeat.com
+thenextweb.com
+zdnet.com
+cnet.com
+techradar.com
+bloomberg.com
+reuters.com
+
+# --- Video ---
+youtube.com
+youtu.be
+vimeo.com
+
+# ─── Path Blocklist ────────────────────────────────────────────
+# URL paths (or query strings) that indicate non-competitor content.
+# Applied AFTER domain check — can filter subpages of real competitors.
+#
+/jobs/
+/careers/
+/tag/
+/category/
+/news/
+/blog/page/
+/author/
+/wp-content/
+/wp-json/
+/wp-admin/
+/feed/
+/forum/
+/team/
+/about/
+/contact/
+?q=
+?s=
+?search=
+?page=
+?tag=
+?category=

@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-06-14T15:12:50",
+  "source": "competitor_jsonld_validation",
+  "url": "https://connectingdots.gr",
+  "domain": "connectingdots.gr",
+  "has_json_ld": true,
+  "json_ld": {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "Connecting Dots Agency",
+    "url": "/",
+    "logo": "//capp.nicepage.com/images/default-logo.png",
+    "sameAs": [
+      "https://www.facebook.com/connectingdots.gr",
+      "https://www.linkedin.com/company/connectingdotsgr",
+      "https://www.instagram.com/connectingdotsgr/"
+    ]
+  },
+  "issues": [
+    {
+      "type": "missing_graph",
+      "severity": "CRITICAL",
+      "message": "JSON-LD has no @graph array"
+    }
+  ],
+  "issue_count": 1
+}

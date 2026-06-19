@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+.serp_session/
+.env
+*.log
+data/runs/
+archive/
+.DS_Store
+*.pdf
+data/runs/
+archive/
+*.pdf

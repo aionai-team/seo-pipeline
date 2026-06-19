@@ -1,0 +1,11 @@
+# SEO scripts — aionAI Keyword Research Pipeline
+# -------------------------------
+# Usage:
+#   pip install -r requirements.txt
+#
+# Script #1 — PAA Scraper (Google Suggest API)
+pytrends>=4.9.2
+requests>=2.28.0
+#
+# Script #2 — Trend Validator (coming next)
+# pytrends==4.9.2

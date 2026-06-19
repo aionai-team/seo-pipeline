@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-06-14T15:12:49",
+  "source": "competitor_jsonld_validation",
+  "url": "https://www.ot.gr",
+  "domain": "www.ot.gr",
+  "has_json_ld": true,
+  "json_ld": {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "Οικονομικός Ταχυδρόμος",
+    "url": "https://www.ot.gr/",
+    "description": "Οικονομικές ειδήσεις, αναλύσεις και ρεπορτάζ για τις επιχειρήσεις, τις αγορές και την οικονομία",
+    "sameAs": [
+      "https://www.facebook.com/otgrofficial",
+      "https://www.instagram.com/otgr_official/",
+      "https://www.linkedin.com/company/otgr/",
+      "https://x.com/otgr_official"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Συγγρού 340, Καλλιθέα",
+      "addressLocality": "Αθήνα",
+      "addressRegion": "Αττική",
+      "postalCode": "176 73",
+      "addressCountry": {
+        "@type": "Country",
+        "name": "GR"
+      }
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "telephone": "+30-2107547000",
+      "email": "ot@alteregomedia.org",
+      "areaServed": "GR"
+    },
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.ot.gr/wp-content/themes/whsk_otsem/common/icons/android-chrome-192x192.png",
+      "width": 192,
+      "height": 192
+    },
+    "parentOrganization": {
+      "@type": "Organization",
+      "name": "Alter Ego Media",
+      "url": "https://www.alteregomedia.org/"
+    },
+    "knowsAbout": [
+      "Οικονομία",
+      "Αγορές",
+      "Επιχειρήσεις",
+      "Πολιτική",
+      "Διεθνής Οικονομία",
+      "Τράπεζες",
+      "Τεχνολογία"
+    ]
+  },
+  "issues": [
+    {
+      "type": "missing_graph",
+      "severity": "CRITICAL",
+      "message": "JSON-LD has no @graph array"
+    }
+  ],
+  "issue_count": 1
+}

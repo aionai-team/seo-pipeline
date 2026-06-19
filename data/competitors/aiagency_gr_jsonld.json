@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-06-14T15:12:44",
+  "source": "competitor_jsonld_validation",
+  "url": "https://aiagency.gr",
+  "domain": "aiagency.gr",
+  "has_json_ld": false,
+  "json_ld": {},
+  "issues": [
+    {
+      "type": "missing_graph",
+      "severity": "CRITICAL",
+      "message": "JSON-LD has no @graph array"
+    }
+  ],
+  "issue_count": 1
+}

@@ -1,0 +1,151 @@
+{
+  "timestamp": "2026-06-14T15:12:48",
+  "source": "competitor_jsonld_validation",
+  "url": "https://flipnewmedia.com",
+  "domain": "flipnewmedia.com",
+  "has_json_ld": true,
+  "json_ld": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.flipnewmedia.com/",
+        "url": "https://www.flipnewmedia.com/",
+        "name": "FLIPNEWMEDIA - Digital Marketing Agency",
+        "isPartOf": {
+          "@id": "https://www.flipnewmedia.com/#website"
+        },
+        "about": {
+          "@id": "https://www.flipnewmedia.com/#organization"
+        },
+        "datePublished": "2023-04-05T20:17:31+00:00",
+        "dateModified": "2025-08-11T07:13:25+00:00",
+        "description": "Η FLIPNEWMEDIA δεν είναι ένα συνηθισμένο agency. Πιστεύουμε στην καινοτομία και προσφέρουμε tailor made υπηρεσίες στους συνεργάτες μας.",
+        "breadcrumb": {
+          "@id": "https://www.flipnewmedia.com/#breadcrumb"
+        },
+        "inLanguage": "el",
+        "potentialAction": [
+          {
+            "@type": "ReadAction",
+            "target": [
+              "https://www.flipnewmedia.com/"
+            ]
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.flipnewmedia.com/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home"
+          }
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.flipnewmedia.com/#website",
+        "url": "https://www.flipnewmedia.com/",
+        "name": "FLIPNEWMEDIA",
+        "description": "Digital Marketing Agency",
+        "publisher": {
+          "@id": "https://www.flipnewmedia.com/#organization"
+        },
+        "alternateName": "Digital Marketing Agency",
+        "potentialAction": [
+          {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.flipnewmedia.com/?s={search_term_string}"
+            },
+            "query-input": {
+              "@type": "PropertyValueSpecification",
+              "valueRequired": true,
+              "valueName": "search_term_string"
+            }
+          }
+        ],
+        "inLanguage": "el"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.flipnewmedia.com/#organization",
+        "name": "FLIPNEWMEDIA",
+        "url": "https://www.flipnewmedia.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "inLanguage": "el",
+          "@id": "https://www.flipnewmedia.com/#/schema/logo/image/",
+          "url": "https://www.flipnewmedia.com/wp-content/uploads/2024/06/flip_logo.svg",
+          "contentUrl": "https://www.flipnewmedia.com/wp-content/uploads/2024/06/flip_logo.svg",
+          "caption": "FLIPNEWMEDIA"
+        },
+        "image": {
+          "@id": "https://www.flipnewmedia.com/#/schema/logo/image/"
+        }
+      }
+    ]
+  },
+  "issues": [
+    {
+      "type": "missing_telephone",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: telephone"
+    },
+    {
+      "type": "missing_email",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: email"
+    },
+    {
+      "type": "missing_description",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: description"
+    },
+    {
+      "type": "missing_foundingDate",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: foundingDate"
+    },
+    {
+      "type": "missing_areaServed",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: areaServed"
+    },
+    {
+      "type": "missing_serviceType",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: serviceType"
+    },
+    {
+      "type": "missing_address",
+      "severity": "HIGH",
+      "message": "Organization entity missing required field: address"
+    },
+    {
+      "type": "missing_areas",
+      "severity": "MEDIUM",
+      "message": "No areaServed entries for local SEO"
+    },
+    {
+      "type": "missing_services",
+      "severity": "MEDIUM",
+      "message": "No serviceType entries"
+    },
+    {
+      "type": "short_description",
+      "severity": "LOW",
+      "message": "Description is only 0 chars (min 50)"
+    },
+    {
+      "type": "description_not_greek",
+      "severity": "MEDIUM",
+      "message": "Description does not contain Greek characters"
+    }
+  ],
+  "issue_count": 11
+}
